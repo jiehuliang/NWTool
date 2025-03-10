@@ -60,7 +60,7 @@ void TcpConnection::set_close_callback(std::function<void(const std::shared_ptr<
 void TcpConnection::set_message_callback(std::function<void(const std::shared_ptr<TcpConnection> &)> const &fn) { 
     on_message_ = std::move(fn);
 }
-void TcpConnection::set_session(std::shared_ptr<void> session) {
+void TcpConnection::set_session(const std::shared_ptr<void>& session) {
     session_ = session;
 }
 
