@@ -38,7 +38,7 @@ public:
     // 接受到信息的回调函数                                  
     void set_message_callback(std::function<void(const std::shared_ptr<TcpConnection> &)> const &fn);
 
-    void set_session_type(std::shared_ptr<void> session);
+    void set_session(std::shared_ptr<void> session);
 
     // 设定send buf
     Buffer *read_buf();

@@ -35,12 +35,13 @@ TcpConnection::~TcpConnection(){
 }
 
 void TcpConnection::ConnectionEstablished(){
-    state_ = ConnectionState::Connected;
-    channel_->Tie(shared_from_this());
-    channel_->EnableRead();
+    //先回调保证先执行set_session()
     if (on_connect_){
         on_connect_(shared_from_this());
     }
+    state_ = ConnectionState::Connected;
+    channel_->Tie(shared_from_this());
+    channel_->EnableRead();
 }
 
 void TcpConnection::ConnectionDestructor(){
@@ -59,7 +60,7 @@ void TcpConnection::set_close_callback(std::function<void(const std::shared_ptr<
 void TcpConnection::set_message_callback(std::function<void(const std::shared_ptr<TcpConnection> &)> const &fn) { 
     on_message_ = std::move(fn);
 }
-void TcpConnection::set_session_type(std::shared_ptr<void> session) {
+void TcpConnection::set_session(std::shared_ptr<void> session) {
     session_ = session;
 }
 
