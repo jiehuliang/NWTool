@@ -1,6 +1,5 @@
 aux_source_directory(. SRCLIST)
 
-include_directories(../include)
 
 
 foreach(TEST_SRC ${SRCLIST})

@@ -1,11 +1,11 @@
 #include "TcpConnection.h"
 #include "Buffer.h"
 #include "Channel.h"
-#include "common.h"
-#include "EventLoop.h"
-#include "HttpContext.h"
-#include "TimeStamp.h"
-#include "Logging.h"
+#include "Util/common.h"
+#include "Event/EventLoop.h"
+#include "Http/HttpContext.h"
+#include "Timer/TimeStamp.h"
+#include "Log/Logging.h"
 #include <thread>
 #include <memory>
 #include <unistd.h>
@@ -27,7 +27,6 @@ TcpConnection::TcpConnection(EventLoop *loop, int connfd, int connid): connfd_(c
     read_buf_ = std::unique_ptr<Buffer>(new Buffer());
     send_buf_ = std::unique_ptr<Buffer>(new Buffer());
     context_ = std::unique_ptr<HttpContext>(new HttpContext());
-    session_ = std::make_shared<RtspSession>();
 }
 
 TcpConnection::~TcpConnection(){
@@ -42,7 +41,6 @@ void TcpConnection::ConnectionEstablished(){
     if (on_connect_){
         on_connect_(shared_from_this());
     }
-    session_->setConnWeakPtr(std::weak_ptr<TcpConnection>(shared_from_this()));
 }
 
 void TcpConnection::ConnectionDestructor(){
@@ -61,7 +59,9 @@ void TcpConnection::set_close_callback(std::function<void(const std::shared_ptr<
 void TcpConnection::set_message_callback(std::function<void(const std::shared_ptr<TcpConnection> &)> const &fn) { 
     on_message_ = std::move(fn);
 }
-
+void TcpConnection::set_session_type(std::shared_ptr<void> session) {
+    session_ = session;
+}
 
 void TcpConnection::HandleClose() {
     //std::cout << std::this_thread::get_id() << " TcpConnection::HandleClose" << std::endl;
@@ -198,7 +198,7 @@ void TcpConnection::WriteNonBlocking(){
 
 HttpContext *TcpConnection::context() const { return context_.get(); }
 
-RtspSession *TcpConnection::session() const { return session_.get(); }
+void *TcpConnection::session() const { return session_.get(); }
 
 TimeStamp TcpConnection::timestamp() const { return timestamp_; }
 

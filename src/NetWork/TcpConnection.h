@@ -1,12 +1,11 @@
 #ifndef TCPCONNECTION_H
 #define TCPCONNECTION_H
-#include "common.h"
+#include "Util/common.h"
 
 #include <functional>
 #include <memory>
 #include <string>
-#include "TimeStamp.h"
-#include "RtspSession.h"
+#include "Timer/TimeStamp.h"
 
 class Buffer;
 class HttpContext;
@@ -37,7 +36,9 @@ public:
      // 关闭时的回调函数
     void set_close_callback(std::function<void(const std::shared_ptr<TcpConnection> &)> const &fn);   
     // 接受到信息的回调函数                                  
-    void set_message_callback(std::function<void(const std::shared_ptr<TcpConnection> &)> const &fn); 
+    void set_message_callback(std::function<void(const std::shared_ptr<TcpConnection> &)> const &fn);
+
+    void set_session_type(std::shared_ptr<void> session);
 
     // 设定send buf
     Buffer *read_buf();
@@ -60,7 +61,7 @@ public:
     int fd() const;
     int id() const;
     HttpContext *context() const;
-    RtspSession* session() const;
+    void* session() const;
 
     TimeStamp timestamp() const;
     void UpdateTimeStamp(TimeStamp now);
@@ -90,7 +91,7 @@ private:
 
     std::unique_ptr<HttpContext> context_;
 
-    std::shared_ptr<RtspSession> session_;
+    std::shared_ptr<void> session_;
 
     // 需要频繁赋值，使用普通成员变量。
     TimeStamp timestamp_;

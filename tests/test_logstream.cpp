@@ -1,5 +1,5 @@
-#include "LogStream.h"
-#include "Logging.h"
+#include "Log/LogStream.h"
+#include "Log/Logging.h"
 #include <iostream>
 int main(){
     LogStream os;

@@ -1,7 +1,7 @@
 #ifndef LOG_STREAM_H
 #define LOG_STREAM_H
 
-#include "common.h"
+#include "Util/common.h"
 #include <string>
 #include <algorithm>
 #include <cstring>

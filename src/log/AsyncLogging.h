@@ -5,7 +5,7 @@
 #include <memory>
 
 #include <thread>
-#include "Latch.h"
+#include "Util/Latch.h"
 #include "Logging.h"
 
 static const double BufferWriteTimeout = 3.0;//等待写入的时间

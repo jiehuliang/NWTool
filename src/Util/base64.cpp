@@ -1,6 +1,4 @@
 #include "base64.h"
-
-#include "base64.h"
 #include <memory>
 #include <limits.h>
 

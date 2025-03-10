@@ -2,8 +2,8 @@
 #include "TimeStamp.h"
 #include "TimerQueue.h"
 
-#include "Channel.h"
-#include "EventLoop.h"
+#include "NetWork/Channel.h"
+#include "Event/EventLoop.h"
 #include  <cstring>
 #include <sys/timerfd.h>
 #include <assert.h>

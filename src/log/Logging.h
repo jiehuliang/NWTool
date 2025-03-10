@@ -2,8 +2,8 @@
 #define LOGGING_H
 
 #include <string.h>
-#include "common.h"
-#include "TimeStamp.h"
+#include "Util/common.h"
+#include "Timer/TimeStamp.h"
 #include "LogStream.h"
 
 class Logger {

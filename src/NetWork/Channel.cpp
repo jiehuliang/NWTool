@@ -1,7 +1,7 @@
 
 #include "Channel.h"
-#include "EventLoop.h"
-#include "common.h"
+#include "Event/EventLoop.h"
+#include "Util/common.h"
 
 #include <sys/epoll.h>
 #include <unistd.h>

@@ -1,14 +1,14 @@
 #include "TcpServer.h"
 #include "TcpConnection.h"
-#include "EventLoop.h"
+#include "Event/EventLoop.h"
 #include "Acceptor.h"
-#include "EventLoopThreadPool.h"
-#include "common.h"
-#include "CurrentThread.h"
+#include "Thread/EventLoopThreadPool.h"
+#include "Util/common.h"
+#include "Util/CurrentThread.h"
 #include <memory>
 #include <assert.h>
 #include <iostream>
-#include "Logging.h"
+#include "Log/Logging.h"
 
 TcpServer::TcpServer(EventLoop *loop, const char * ip, const int port): main_reactor_(loop), next_conn_id_(1){
     //

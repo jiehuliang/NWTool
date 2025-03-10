@@ -4,7 +4,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 
-project ("RSTool")
+project ("NWTool")
 
 # 使能 C++11
 # Enable C++11
@@ -18,13 +18,12 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")  # -g: 生成调试信息, -O0: 禁用优化
 
 #设置子目录
 #Set subdirectories
-set(SUB_DIR_LIST "Util" "NetWork" "Event" "Timer" "Thread" "http" "log")
+set(SUB_DIR_LIST "Util" "NetWork" "Event" "Timer" "Thread" "Http" "Log")
 
 foreach(SUB_DIR ${SUB_DIR_LIST})
     #遍历源文件
     #Traverse source file
     aux_source_directory(src/${SUB_DIR} SRC_LIST)
-    include_directories(src/${SUB_DIR})
 endforeach()
 
 #安装目录
@@ -51,13 +50,19 @@ if(NOT IOS AND NOT ANDROID AND NOT WIN32)
     target_link_libraries(${PROJECT_NAME}_shared ${LINK_LIB_LIST})
     set_target_properties(${PROJECT_NAME}_shared PROPERTIES OUTPUT_NAME "${PROJECT_NAME}")
     set_target_properties(${PROJECT_NAME}_shared PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
-    #install(TARGETS ${PROJECT_NAME}_shared  ARCHIVE DESTINATION ${INSTALL_PATH_LIB} LIBRARY DESTINATION ${INSTALL_PATH_LIB})
+    install(TARGETS ${PROJECT_NAME}_shared  ARCHIVE DESTINATION ${INSTALL_PATH_LIB} LIBRARY DESTINATION ${INSTALL_PATH_LIB})
 endif()
 
 #编译静态库
 #Compile static library
 add_library(${PROJECT_NAME}_static STATIC ${SRC_LIST})
-
+#引用头文件路径
+#Reference header file path
+target_include_directories(${PROJECT_NAME}_static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set_target_properties(${PROJECT_NAME}_static PROPERTIES OUTPUT_NAME "${PROJECT_NAME}")
+#安装静态库至系统目录
+#Install static library to system directory
+install(TARGETS ${PROJECT_NAME}_static ARCHIVE DESTINATION ${INSTALL_PATH_LIB})
 
 add_subdirectory(tests)
 

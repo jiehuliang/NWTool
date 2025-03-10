@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <cstring>
-#include "common.h"
+#include "Util/common.h"
 
 static const int kPrePendIndex = 8;//prependindex����
 static const int kInitalSize = 1024;//��ʼ����С���ٿռ䳤��

@@ -1,5 +1,5 @@
 #include "Logging.h"
-#include "CurrentThread.h"
+#include "Util/CurrentThread.h"
 
 //为了实现多线程中日志时间格式化的效率，增加了两个_thread变量，
 //用于缓存当前线程存日期时间字符串、上一次日志记录的秒数

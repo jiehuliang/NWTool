@@ -1,6 +1,6 @@
 #include <cstdio>
-#include "common.h"
-#include "Logging.h"
+#include "Util/common.h"
+#include "Log/Logging.h"
 
 int main() {
 	for (int i = 0; i < 10000; ++i) {
