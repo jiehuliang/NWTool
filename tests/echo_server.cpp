@@ -2,7 +2,7 @@
 #include "Event/EventLoop.h"
 #include "NetWork/TcpConnection.h"
 #include "NetWork/TcpServer.h"
-#include "NetWork/Buffer.h"
+#include "Util/Buffer.h"
 #include "Util/CurrentThread.h"
 #include <iostream>
 #include <functional>
