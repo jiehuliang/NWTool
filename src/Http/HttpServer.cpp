@@ -5,7 +5,7 @@
 #include "NetWork/Acceptor.h"
 #include "NetWork/TcpServer.h"
 #include "NetWork/TcpConnection.h"
-#include "NetWork/Buffer.h"
+#include "Util/Buffer.h"
 #include "Event/EventLoop.h"
 #include "Log/Logging.h"
 #include "Timer/TimeStamp.h"
