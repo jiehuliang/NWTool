@@ -11,8 +11,6 @@
 #include <assert.h>
 #include <cstring>
 #include <thread>
-#include <fcntl.h>
-#include <assert.h>
 #include <iostream>
 
 Acceptor::Acceptor(EventLoop *loop, const char * ip, const int port) :loop_(loop), listenfd_(-1){

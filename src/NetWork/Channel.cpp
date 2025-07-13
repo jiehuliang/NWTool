@@ -58,6 +58,11 @@ void Channel::EnableET(){
     loop_->UpdateChannel(this);
 }
 
+void Channel::disableAll() {
+    listen_events_ = 0;
+    loop_->UpdateChannel(this);
+}
+
 int Channel::fd() const { return fd_; }
 
 short Channel::listen_events() const { return listen_events_; }
