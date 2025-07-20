@@ -40,7 +40,8 @@ bool Connector::Connection(const char* ip, const int port) {
 	addr.sin_family = AF_INET;
 	addr.sin_addr.s_addr = inet_addr(ip);
 	addr.sin_port = htons(port);
-	int ret = connect(socket_fd_, (struct sockaddr*)&addr, sizeof(addr) == -1);
+	LOG_INFO << "connect socketfd:" << socket_fd_ << ",ip:" << ip << ",port:" << port;
+	int ret = connect(socket_fd_, (struct sockaddr*)&addr, sizeof(addr));
 	int error = ret == 0 ? 0 : errno;
 	switch (error) {
 	case 0:
@@ -80,13 +81,22 @@ void Connector::connecting(int socket_fd_) {
 	channel_->EnableWrite();
 }
 
+void Connector::resetChannel()
+{
+	channel_.reset();
+}
+
 void Connector::handleWrite() {
 	channel_->disableAll();
 	loop_->DeleteChannel(channel_.get());
+	loop_->RunOneFunc(std::bind(&Connector::resetChannel, this));
 	int optval = -1;
 	socklen_t optlen = static_cast<socklen_t>(sizeof(optval));
 	if (::getsockopt(socket_fd_, SOL_SOCKET, SO_ERROR, &optval, &optlen) == 0 && optval == 0) {
 		connection_callback(socket_fd_);
+	}
+	else {
+		LOG_ERROR << "Unexpected error in Connector::handleWrite,optval: " << optval ;
 	}
 
 }

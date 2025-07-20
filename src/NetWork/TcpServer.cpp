@@ -70,7 +70,7 @@ inline void TcpServer::HandleCloseInLoop(const std::shared_ptr<TcpConnection> & 
     //connectionsMap_.erase(connectionsMap_.find(conn->fd()));
 
     EventLoop *loop = conn->loop();
-    loop->QueueOneFunc(std::bind(&TcpConnection::ConnectionDestructor, conn));
+    loop->RunOneFunc(std::bind(&TcpConnection::ConnectionDestructor, conn));
 }
 
 void TcpServer::set_connection_callback(std::function<void(const std::shared_ptr<TcpConnection> &)> const &fn) { on_connect_ = std::move(fn); };

@@ -41,7 +41,7 @@ void EchoServer::onConnection(const std::shared_ptr<TcpConnection> & conn){
     socklen_t peer_addrlength = sizeof(peeraddr);
     getpeername(clnt_fd, (struct sockaddr *)&peeraddr, &peer_addrlength);
 
-    std::cout << CurrentThread::tid()
+    std::cout << "ThreadId:" << CurrentThread::tid()
               << " EchoServer::OnNewConnection : new connection "
               << "[fd#" << clnt_fd << "]"
               << " from " << inet_ntoa(peeraddr.sin_addr) << ":" << ntohs(peeraddr.sin_port)
@@ -52,9 +52,9 @@ void EchoServer::onMessage(const std::shared_ptr<TcpConnection> & conn){
     // std::cout << CurrentThread::tid() << " EchoServer::onMessage" << std::endl;
     if (conn->state() == TcpConnection::ConnectionState::Connected)
     {
-        std::cout << CurrentThread::tid() << "Message from clent " << conn->read_buf()->beginread()<< std::endl;
-        conn->Send(conn->read_buf()->beginread(), conn->read_buf()->readablebytes());
-        conn->HandleClose();
+        std::cout << "ThreadId:"  << CurrentThread::tid() << " Message from clent " << conn->read_buf()->beginread() << std::endl;
+        conn->Send(conn->read_buf()->RetrieveAllAsString());
+        //conn->HandleClose();
     }
 }
 

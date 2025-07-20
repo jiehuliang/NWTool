@@ -33,13 +33,17 @@ EventLoop::~EventLoop() {
 }
 
 void EventLoop::Loop(){
-    while (true)
+    while (run_)
     {
         for (Channel *active_ch : poller_->Poll()){
             active_ch->HandleEvent();
         }
         DoToDoList();
     }
+}
+
+void EventLoop::Stop() {
+    run_ = false;
 }
 
 void EventLoop::UpdateChannel(Channel *ch) { poller_->UpdateChannel(ch); }

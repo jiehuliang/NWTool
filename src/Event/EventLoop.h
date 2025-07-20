@@ -20,6 +20,7 @@ public:
     ~EventLoop();
     
     void Loop();
+    void Stop();
     void UpdateChannel(Channel *ch);
     void DeleteChannel(Channel *ch);
 
@@ -44,6 +45,7 @@ public:
     void HandleRead();
 
 private:
+    bool run_ = true;
     std::unique_ptr<Epoller> poller_;
     std::vector<std::function<void()>> to_do_list_;
     std::mutex mutex_;

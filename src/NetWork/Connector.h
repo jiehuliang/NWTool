@@ -17,6 +17,7 @@ public:
 	void Create();
 	bool Connection(const char* ip,const int port);
 	void connecting(int socket_fd_);
+	void resetChannel();
 
 	void handleWrite();
 

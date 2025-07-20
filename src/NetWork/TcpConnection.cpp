@@ -124,7 +124,7 @@ void TcpConnection::Send(const char *msg, int len){
             send_size = 0;//˵��ʵ����û�з�������
         }
         else {
-            LOG_ERROR << "TcpConnection::Send - TcpConnection Send Error";
+            LOG_ERROR << "TcpConnection::Send - TcpConnection Send Error:" << send_size;
             channel_->set_write_callback([]() {});
             HandleClose();
             return;

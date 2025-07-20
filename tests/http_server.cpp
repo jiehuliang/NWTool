@@ -74,7 +74,7 @@ int main(int argc, char *argv[]){
     server->SetThreadNums(size);
     server->start();
     
-    //delete loop;
-    //delete server;
+    delete loop;
+    delete server;
     return 0;
 }
