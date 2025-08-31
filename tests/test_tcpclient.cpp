@@ -4,6 +4,7 @@
 #include "NetWork/TcpClient.h"
 #include "Util/Buffer.h"
 #include "Util/CurrentThread.h"
+#include "HooLog/HooLog.h"
 #include <iostream>
 #include <functional>
 #include <arpa/inet.h>
@@ -81,6 +82,13 @@ int main(int argc, char* argv[]) {
     }
     EventLoop* loop = new EventLoop();
     EchoClient* client = new EchoClient(loop, "127.0.0.1", port);
+
+    setLogLevel(loglevel::DEBUG);
+
+    std::shared_ptr<AsyncLogger> asyncLogger = std::make_shared<AsyncLogger>();
+    setOutputFunc(std::bind(&AsyncLogger::AppendNonCache, asyncLogger, std::placeholders::_1, std::placeholders::_2));
+    setFlushFunc(std::bind(&AsyncLogger::Flush, asyncLogger));
+    asyncLogger->Start();
 
     // 2. 键盘线程：阻塞读 stdin，然后把消息抛到 loop 线程发送
     std::thread keyboard([&] {

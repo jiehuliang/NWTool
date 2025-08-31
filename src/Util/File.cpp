@@ -1,5 +1,5 @@
 #include "File.h"
-#include "Log/Logging.h"
+#include "HooLog/HooLog.h"
 #include <cstdio>
 #include <sys/stat.h>
 #if defined(_WIN32)

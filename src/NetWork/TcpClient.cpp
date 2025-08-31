@@ -1,7 +1,7 @@
 #include "TcpClient.h"
 #include "Event/EventLoop.h"
 #include "TcpConnection.h"
-#include "Log/Logging.h"
+#include "HooLog/HooLog.h"
 
 TcpClient::TcpClient(EventLoop* loop, const char* ip, const int port):loop_(loop) {
 	Connector_ = std::unique_ptr<Connector>(new Connector(loop_,ip,port));

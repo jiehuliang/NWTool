@@ -7,7 +7,7 @@
 #include "NetWork/TcpConnection.h"
 #include "Util/Buffer.h"
 #include "Event/EventLoop.h"
-#include "Log/Logging.h"
+#include "HooLog/HooLog.h"
 #include "Timer/TimeStamp.h"
 #include <arpa/inet.h>
 #include <functional>

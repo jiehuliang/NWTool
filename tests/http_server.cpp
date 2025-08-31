@@ -3,8 +3,7 @@
 #include "Http/HttpRequest.h"
 #include "Http/HttpResponse.h"
 #include "Event/EventLoop.h"
-#include "Log/Logging.h"
-#include "Log/AsyncLogging.h"
+#include "HooLog/HooLog.h"
 #include <string>
 #include <memory>
 
@@ -39,10 +38,10 @@ void HttpResponseCallback(const HttpRequest &request, HttpResponse *response)
     return;
 }
 
-std::unique_ptr<AsyncLogging> asynclog;
+std::unique_ptr<AsyncLogger> asynclog;
 void AsyncOutputFunc(const char *data, int len)
 {
-    asynclog->Append(data, len);
+    asynclog->AppendNonCache(data, len);
 }
 
 void AsyncFlushFunc() {
@@ -61,11 +60,12 @@ int main(int argc, char *argv[]){
         exit(0);
     }
     // 开发阶段暂时不适用异步日志
-    //asynclog = std::make_unique<AsyncLogging>();
-    //Logger::setOutput(AsyncOutputFunc);
-    //Logger::setFlush(AsyncFlushFunc);
+    setLogLevel(loglevel::DEBUG);
 
-    //asynclog->Start();
+    std::shared_ptr<AsyncLogger> asyncLogger = std::make_shared<AsyncLogger>();
+    setOutputFunc(std::bind(&AsyncLogger::AppendNonCache, asyncLogger, std::placeholders::_1, std::placeholders::_2));
+    setFlushFunc(std::bind(&AsyncLogger::Flush, asyncLogger));
+    asyncLogger->Start();
 
     int size = std::thread::hardware_concurrency() - 1;
     EventLoop *loop = new EventLoop();
