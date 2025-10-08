@@ -13,7 +13,7 @@ TcpClient::~TcpClient() {}
 
 void TcpClient::Start() {
 	Connector_->Start();
-	loop_->Loop();
+	//loop_->Loop();
 }
 
 void TcpClient::Write(const std::string& message) {

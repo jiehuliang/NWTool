@@ -1,5 +1,6 @@
 #include "NetWork/Connector.h"
 #include "Event/EventLoop.h"
+#include "Thread/EventLoopThreadPool.h"
 #include "NetWork/TcpConnection.h"
 #include "NetWork/TcpClient.h"
 #include "Util/Buffer.h"
@@ -80,8 +81,6 @@ int main(int argc, char* argv[]) {
         printf("error");
         exit(0);
     }
-    EventLoop* loop = new EventLoop();
-    EchoClient* client = new EchoClient(loop, "127.0.0.1", port);
 
     setLogLevel(loglevel::DEBUG);
 
@@ -89,6 +88,13 @@ int main(int argc, char* argv[]) {
     setOutputFunc(std::bind(&AsyncLogger::AppendNonCache, asyncLogger, std::placeholders::_1, std::placeholders::_2));
     setFlushFunc(std::bind(&AsyncLogger::Flush, asyncLogger));
     asyncLogger->Start();
+
+    int size = std::thread::hardware_concurrency() - 1;
+    std::unique_ptr<EventLoopThreadPool> event_loop_thread_pool = std::unique_ptr<EventLoopThreadPool>(new EventLoopThreadPool(nullptr));
+    event_loop_thread_pool->SetThreadNums(size);
+    event_loop_thread_pool->start();
+
+    EchoClient* client = new EchoClient(event_loop_thread_pool->nextloop(), "127.0.0.1", port);
 
     // 2. 键盘线程：阻塞读 stdin，然后把消息抛到 loop 线程发送
     std::thread keyboard([&] {
