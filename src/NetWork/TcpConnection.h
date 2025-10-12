@@ -102,8 +102,8 @@ private:
 
 class SessionBase {
 public:
-    SessionBase();
-    virtual ~SessionBase();
+    SessionBase() = default;
+    virtual ~SessionBase() = default;
 };
 
 #endif // TCPCONNECTION_H
