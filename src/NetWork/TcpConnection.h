@@ -9,6 +9,7 @@
 
 class Buffer;
 class HttpContext;
+class SessionBase;
 class TcpConnection : public std::enable_shared_from_this<TcpConnection>
 {
 public:
@@ -38,7 +39,7 @@ public:
     // 接受到信息的回调函数                                  
     void set_message_callback(std::function<void(const std::shared_ptr<TcpConnection> &)> const &fn);
 
-    void set_session(const std::shared_ptr<void>& session);
+    void set_session(SessionBase* session);
 
     // 设定send buf
     Buffer *read_buf();
@@ -61,7 +62,7 @@ public:
     int fd() const;
     int id() const;
     HttpContext *context() const;
-    void* session() const;
+    SessionBase* session() const;
 
     TimeStamp timestamp() const;
     void UpdateTimeStamp(TimeStamp now);
@@ -91,9 +92,18 @@ private:
 
     std::unique_ptr<HttpContext> context_;
 
-    std::shared_ptr<void> session_;
+    //业务Session生命周期与Connection相同
+    SessionBase* session_;
 
     // 需要频繁赋值，使用普通成员变量。
     TimeStamp timestamp_;
 };
+
+
+class SessionBase {
+public:
+    SessionBase();
+    virtual ~SessionBase();
+};
+
 #endif // TCPCONNECTION_H

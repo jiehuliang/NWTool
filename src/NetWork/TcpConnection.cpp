@@ -30,7 +30,6 @@ TcpConnection::TcpConnection(EventLoop *loop, int connfd, int connid): connfd_(c
 }
 
 TcpConnection::~TcpConnection(){
-    //loop_->DeleteChannel(channel_.get());
     ::close(connfd_);
 }
 
@@ -48,6 +47,7 @@ void TcpConnection::ConnectionDestructor(){
     //std::cout << CurrentThread::tid() << " TcpConnection::ConnectionDestructor" << std::endl;
     // ���ò���������������ֲ�ô����������ܣ���Ϊ������ǰ����ǰ`TcpConnection`�Ѿ��൱�ڹر��ˡ�
     // �Ѿ����Խ����loop���뿪
+    delete session_;
     loop_->DeleteChannel(channel_.get());
 }
 
@@ -60,7 +60,7 @@ void TcpConnection::set_close_callback(std::function<void(const std::shared_ptr<
 void TcpConnection::set_message_callback(std::function<void(const std::shared_ptr<TcpConnection> &)> const &fn) { 
     on_message_ = std::move(fn);
 }
-void TcpConnection::set_session(const std::shared_ptr<void>& session) {
+void TcpConnection::set_session(SessionBase* session) {
     session_ = session;
 }
 
@@ -199,7 +199,7 @@ void TcpConnection::WriteNonBlocking(){
 
 HttpContext *TcpConnection::context() const { return context_.get(); }
 
-void *TcpConnection::session() const { return session_.get(); }
+SessionBase *TcpConnection::session() const { return session_; }
 
 TimeStamp TcpConnection::timestamp() const { return timestamp_; }
 
