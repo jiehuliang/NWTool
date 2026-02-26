@@ -34,7 +34,6 @@ TcpConnection::~TcpConnection(){
 }
 
 void TcpConnection::ConnectionEstablished(){
-    //先回调保证先执行set_session()
     if (on_connect_){
         on_connect_(shared_from_this());
     }
@@ -45,8 +44,8 @@ void TcpConnection::ConnectionEstablished(){
 
 void TcpConnection::ConnectionDestructor(){
     //std::cout << CurrentThread::tid() << " TcpConnection::ConnectionDestructor" << std::endl;
-    // ���ò���������������ֲ�ô����������ܣ���Ϊ������ǰ����ǰ`TcpConnection`�Ѿ��൱�ڹر��ˡ�
-    // �Ѿ����Խ����loop���뿪
+    // 将该操作从析构处，移植该处，增加性能，因为在析构前，当前`TcpConnection`已经相当于关闭了。
+    // 已经可以将其从loop处离开。
     delete session_;
     loop_->DeleteChannel(channel_.get());
 }
@@ -109,19 +108,19 @@ void TcpConnection::Send(const char *msg, int len){
     int send_size = 0;
 
     
-    //�����ʱsend_buf_��û�����ݣ�������ȳ��Է�������
+    // 如果此时send_buf_中没有数据，则可以先尝试发送数据， 
     if (send_buf_->readablebytes() == 0) {
-        //ǿ������ת��������remaining����
+        // 强制转换类型，方便remaining操作
         send_size = static_cast<int>(write(connfd_, msg, len));
         // send_size = static_cast<int>(send(connfd_, msg, len, 0));
         if (send_size >= 0) {
-            //˵�������˲�������
+            // 说明发送了部分数据
             remaining -= send_size;
         }
         else if ((send_size == -1) && 
             ((errno == EAGAIN) || (errno == EWOULDBLOCK))) {
-            //˵����ʱTCP�����������ģ�û�а취д�룬ʲô������
-            send_size = 0;//˵��ʵ����û�з�������
+            // 说明此时TCP缓冲区是慢的，没有办法写入，什么都不做
+            send_size = 0;// 说明实际上没有发送数据
         }
         else {
             LOG_ERROR << "TcpConnection::Send - TcpConnection Send Error:" << send_size;
@@ -130,15 +129,14 @@ void TcpConnection::Send(const char *msg, int len){
             return;
         }
     }
-    //��ʣ������ݼ��뵽send_buf�У��ȴ��������͡�
+    // 将剩余的数据加入到send_buf中，等待后续发送。
     assert(remaining <= len);
     if (remaining > 0) {
         send_buf_->Append(msg + send_size, remaining);
 
-        //������һ��ʱ
-        //1.��û�м���д�¼����ڴ�ʱ�����˼���
-        //2.������д�¼��������Ѿ������ˣ���ʱ�ٴμ�����ǿ�ƴ���һ�Σ�
-        // ���ǿ�ƴ���ʧ�ܣ���Ȼ���Եȴ�����TCP��������д��
+        // 到达这一步时
+        // 1. 还没有监听写事件，在此时进行了监听
+        // 2. 监听了写事件，并且已经触发了，此时再次监听，强制触发一次，如果强制触发失败，仍然可以等待后续TCP缓冲区可写。
         channel_->EnableWrite();
     }
 }

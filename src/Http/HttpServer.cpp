@@ -57,7 +57,7 @@ void HttpServer::onMessage(const TcpConnectionPtr &conn){
     {
         //LOG_INFO << "\n"
         //         << conn->read_buf()->PeekAllAsString();
-        // ???????????
+        // 保存最近一次活跃的时间
         if(auto_close_conn_)
             conn->UpdateTimeStamp(TimeStamp::Now());
 
@@ -103,7 +103,7 @@ void HttpServer::start(){
 void HttpServer::SetThreadNums(int thread_nums) { server_->SetThreadNums(thread_nums); }
 
 bool HttpServer::ActiveCloseConn(std::weak_ptr<TcpConnection> & connection){
-    TcpConnectionPtr conn = connection.lock(); //��ֹconn�Ѿ����ͷ�
+    TcpConnectionPtr conn = connection.lock(); //防止conn已经被释放
     if (conn)
     {
         if(TimeStamp::AddTime(conn->timestamp(), AUTOCLOSETIMEOUT) < TimeStamp::Now()){

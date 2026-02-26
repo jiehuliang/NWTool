@@ -59,7 +59,7 @@ int main(int argc, char *argv[]){
         printf("error");
         exit(0);
     }
-    // 开发阶段暂时不适用异步日志
+    // 寮�鍙戦樁娈垫殏鏃朵笉閫傜敤寮傛鏃ュ織
     setLogLevel(loglevel::DEBUG);
 
     std::shared_ptr<AsyncLogger> asyncLogger = std::make_shared<AsyncLogger>();

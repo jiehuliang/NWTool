@@ -16,16 +16,16 @@ class Acceptor{
 
         void set_newconnection_callback(std::function<void(int)> const &callback);
         
-        // 创建socket
+        // 鍒涘缓socket
         void Create();
 
-        // 与ip地址绑定
+        // 涓巌p鍦板潃缁戝畾
         void Bind(const char *ip, const int port);
         
-        // 监听Socket
+        // 鐩戝惉Socket
         void Listen();
 
-        // 接收连接
+        // 鎺ユ敹杩炴帴
         void AcceptConnection();
 
     private:

@@ -16,7 +16,7 @@ TcpServer::TcpServer(EventLoop *loop, const char * ip, const int port): main_rea
     std::function<void(int)> cb = std::bind(&TcpServer::HandleNewConnection, this, std::placeholders::_1);
     acceptor_->set_newconnection_callback(cb);
 
-    // ´´½¨Ïß³Ì³Ø
+    // åˆ›å»ºçº¿ç¨‹æ± 
     thread_pool_ = std::unique_ptr<EventLoopThreadPool>(new EventLoopThreadPool(loop));
     // std::cout << "Tcpserver listening on " << ip << ":" << port << std::endl;
 }
@@ -25,10 +25,10 @@ TcpServer::~TcpServer(){
 };
 
 void TcpServer::Start(){
-    // ´´½¨×ÓÏß³ÌºÍ¶ÔÓ¦µÄEventLoop
+    // åˆ›å»ºå­çº¿ç¨‹å’Œå¯¹åº”çš„EventLoop
     thread_pool_->start();
 
-    // Ö÷Ïß³ÌÆô¶¯
+    // ä¸»çº¿ç¨‹å¯åŠ¨
     main_reactor_->Loop();
 }
 
@@ -36,7 +36,7 @@ inline void TcpServer::HandleNewConnection(int fd){
     assert(fd != -1);
     // uint64_t random = fd % sub_reactors_.size();
 
-    // ´ÓÏß³Ì³ØÖÐ»ñµÃÒ»¸öEventLoop
+    // ä»Žçº¿ç¨‹æ± ä¸­èŽ·å¾—ä¸€ä¸ªEventLoop
     EventLoop *sub_reactor = thread_pool_->nextloop();
 
     std::shared_ptr<TcpConnection> conn = std::make_shared<TcpConnection>(sub_reactor,  fd, next_conn_id_);

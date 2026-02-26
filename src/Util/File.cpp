@@ -33,8 +33,8 @@ bool File::create_path(const std::string& file, unsigned int mod) {
 		if (dir.length() == 0) {
 			break;
 		}
-		if (_access(dir.data(), 0) == -1) {//accessº¯ÊıÊÇ²é¿´ÊÇ²»ÊÇ´æÔÚ
-			if (mkdir(dir.data(), mod) == -1) { //Èç¹û²»´æÔÚ¾ÍÓÃmkdirº¯ÊıÀ´´´½¨
+		if (_access(dir.data(), 0) == -1) {//accesså‡½æ•°æ˜¯æŸ¥çœ‹æ˜¯ä¸æ˜¯å­˜åœ¨
+			if (mkdir(dir.data(), mod) == -1) { //å¦‚æœä¸å­˜åœ¨å°±ç”¨mkdirå‡½æ•°æ¥åˆ›å»º
 				LOG_WARN << "mkdir " << dir << " failed ";
 				return false;
 			}
@@ -54,8 +54,8 @@ FILE* File::create_file(const std::string& file, const std::string& mode) {
 		if (dir.length() == 0) {
 			break;
 		}
-		if (access(dir.data(), 0) == -1) {//accessº¯ÊıÊÇ²é¿´ÊÇ²»ÊÇ´æÔÚ
-			if (mkdir(dir.data(), 0777) == -1) {//Èç¹û²»´æÔÚ¾ÍÓÃmkdirº¯ÊıÀ´´´½¨
+		if (access(dir.data(), 0) == -1) {//accesså‡½æ•°æ˜¯æŸ¥çœ‹æ˜¯ä¸æ˜¯å­˜åœ¨
+			if (mkdir(dir.data(), 0777) == -1) {//å¦‚æœä¸å­˜åœ¨å°±ç”¨mkdirå‡½æ•°æ¥åˆ›å»º
 				LOG_WARN << "mkdir " << dir << " failed ";
 				return nullptr;
 			}

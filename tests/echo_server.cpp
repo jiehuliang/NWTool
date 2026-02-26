@@ -35,7 +35,7 @@ void EchoServer::start(){
 }
 
 void EchoServer::onConnection(const std::shared_ptr<TcpConnection> & conn){
-    // 获取接收连接的Ip地址和port端口
+    // 鑾峰彇鎺ユ敹杩炴帴鐨処p鍦板潃鍜宲ort绔彛
     int clnt_fd = conn->fd();
     struct sockaddr_in peeraddr;
     socklen_t peer_addrlength = sizeof(peeraddr);

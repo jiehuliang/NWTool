@@ -6,8 +6,8 @@
 #include <cstring>
 #include "Util/common.h"
 
-static const int kPrePendIndex = 8;//prependindex����
-static const int kInitalSize = 1024;//��ʼ����С���ٿռ䳤��
+static const int kPrePendIndex = 8; // prependindex长度
+static const int kInitalSize = 1024; // 初始化开辟空间长度
 
 class Buffer{
     public:
@@ -19,10 +19,10 @@ class Buffer{
         Buffer(Buffer&& buf);  
         Buffer& operator=(Buffer&& buf);
 
-        //buffer����ʼλ��
+        // buffer的起始位置
         char* begin();
-        //const �����begin������ʹ��const�������begin����ʱ
-        //���õ��ĵ�����ֻ�ܶ����ݽ��ж������������ܽ����޸�
+        // const对象的begin函数，使得const对象调用begin函数时
+        // 所得到的迭代器只能对数据进行读操作，而不能进行修改
         const char* begin() const;
 
         char* beginread();
@@ -31,37 +31,40 @@ class Buffer{
         char* beginwrite();
         const char* beginwrite() const;
 
-        //��������
-        void AppendPrepend(const  char* message, int len);
+
+        // 添加数据
         void Append(const char* message);
         void Append(const char* message, int len);
         void Append(const std::string& message);
 
-        //��ȡ�ɶ���С��
+
+        // 获得可读大小等
         int readablebytes() const;
         int writeablebytes() const;
         int prependablebytes() const;
 
-        //�鿴����,��������`read_index_`��λ��
+        // 查看数据，但是不更新`read_index_`位置
         char* Peek();
         const char* Peek() const;
         std::string PeekAsString(int len);
         std::string PeekAllAsString();
 
-        //ȡ���ݣ�ȡ�������read_index_λ�ã��൱�ڲ����ظ�ȡ
-        //����
+        // 取数据，取出后更新read_index,相当于不可重复取
+        // 定长
         void Retrieve(int len);
         std::string RetrieveAsString(int len);
 
-        //ȫ��
+        // 全部
         void RetrieveAll();
         std::string RetrieveAllAsString();
 
-        //ĳ������֮ǰ
+        // 某个索引之前
         void RetrieveUtil(const char* end);
         std::string RetrieveUtilAsString(const char* end);
 
-        //�鿴�ռ�
+        
+
+        //查看空间
         void EnsureWriteableBytes(int len);
 
     private:

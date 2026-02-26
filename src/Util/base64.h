@@ -35,9 +35,9 @@ char* av_base64_encode(char* out, int out_size, const uint8_t* in, int in_size);
 
 
  /**
-  * 编码base64
-  * @param txt 明文
-  * @return 密文
+  * 缂栫爜base64
+  * @param txt 鏄庢枃
+  * @return 瀵嗘枃
   * Encode base64
   * @param txt plaintext
   * @return ciphertext
@@ -45,9 +45,9 @@ char* av_base64_encode(char* out, int out_size, const uint8_t* in, int in_size);
 std::string encodeBase64(const std::string& txt);
 
 /**
- * 解码base64
- * @param txt 密文
- * @return 明文
+ * 瑙ｇ爜base64
+ * @param txt 瀵嗘枃
+ * @return 鏄庢枃
  * Decode base64
  * @param txt ciphertext
  * @return plaintext

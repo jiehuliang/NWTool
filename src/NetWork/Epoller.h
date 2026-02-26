@@ -14,12 +14,12 @@ public:
     Epoller();
     ~Epoller();
 
-    // ?????channel
+
     void UpdateChannel(Channel *ch) const;
-    // ???????
+
     void DeleteChannel(Channel *ch) const;
 
-    // ?????epoll_wait?????
+
     std::vector<Channel *> Poll(long timeout = -1) const;
 
     private:

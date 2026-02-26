@@ -15,7 +15,7 @@ Epoller::Epoller(){
 }
 
 Epoller::~Epoller(){
-    // ¹Ø±Õsocket£¬²¢ÊÍ·Åevents_¿Õ¼ä
+    // å…³é—­socketï¼Œå¹¶é‡Šæ”¾events_ç©ºé—´
     if(fd_ != -1){
         ::close(fd_);
     }
