@@ -124,8 +124,6 @@ void TcpConnection::Send(const char *msg, int len){
         }
         else {
             LOG_ERROR << "TcpConnection::Send - TcpConnection Send Error:" << send_size;
-            channel_->set_write_callback([]() {});
-            HandleClose();
             return;
         }
     }
@@ -182,13 +180,12 @@ void TcpConnection::WriteNonBlocking(){
     // int send_size = static_cast<int>(::write(connfd_, send_buf_->Peek(), remaining));
     int send_size = static_cast<int>(::send(connfd_, send_buf_->Peek(), remaining, 0));
     if ((send_size == -1) && ((errno == EAGAIN) || (errno == EWOULDBLOCK))) {
+        // 说明此时TCP缓冲区是满的，没有办法写入，什么都不做 
+        // 主要是防止，在Send时write后监听EPOLLOUT，但是TCP缓冲区还是满的，
         send_size = 0;
     }
     else if (send_size == -1) {
         LOG_ERROR << "TcpConnection::Send - TcpConnection Send Error";
-        channel_->set_write_callback([]() {});
-        HandleClose();
-        //return;
     }
 
     remaining -= send_size;
