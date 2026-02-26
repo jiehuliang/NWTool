@@ -33,6 +33,8 @@ class Buffer{
 
 
         // 添加数据
+        void AppendPrepend(const  char* message, int len);
+
         void Append(const char* message);
         void Append(const char* message, int len);
         void Append(const std::string& message);
