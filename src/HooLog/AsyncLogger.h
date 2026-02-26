@@ -95,18 +95,20 @@ public:
 		std::vector<std::unique_ptr<Buffer>> active_buffers;
 
 		while (running_.load()) {
-			std::unique_lock<std::mutex> lock(mutex_);
-			if (buffers_.empty()) {
-				conv_.wait_for(lock, std::chrono::milliseconds(500), [this]() {return !buffers_.empty();});
-			}
+			{
+				std::unique_lock<std::mutex> lock(mutex_);
+				if (buffers_.empty()) {
+					conv_.wait_for(lock, std::chrono::milliseconds(500), [this]() {return !buffers_.empty();});
+				}
 
-			buffers_.push_back(std::move(current_));
-			active_buffers.swap(buffers_);
+				buffers_.push_back(std::move(current_));
+				active_buffers.swap(buffers_);
 
-			current_ = std::move(new_current);
+				current_ = std::move(new_current);
 
-			if (!next_) {
-				next_ = std::move(new_next);
+				if (!next_) {
+					next_ = std::move(new_next);
+				}
 			}
 
 			for (const auto& buffer : active_buffers) {
