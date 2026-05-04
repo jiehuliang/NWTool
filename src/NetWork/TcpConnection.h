@@ -39,7 +39,7 @@ public:
     // 接受到信息的回调函数                                  
     void set_message_callback(std::function<void(const std::shared_ptr<TcpConnection> &)> const &fn);
 
-    void set_session(SessionBase* session);
+    void set_session(std::shared_ptr<SessionBase> session);
 
     // 设定send buf
     Buffer *read_buf();
@@ -62,7 +62,7 @@ public:
     int fd() const;
     int id() const;
     HttpContext *context() const;
-    SessionBase* session() const;
+    std::shared_ptr<SessionBase> session() const;
 
     TimeStamp timestamp() const;
     void UpdateTimeStamp(TimeStamp now);
@@ -93,7 +93,7 @@ private:
     std::unique_ptr<HttpContext> context_;
 
     //业务Session生命周期与Connection相同
-    SessionBase* session_;
+    std::shared_ptr<SessionBase> session_;
 
     // 需要频繁赋值，使用普通成员变量。
     TimeStamp timestamp_;

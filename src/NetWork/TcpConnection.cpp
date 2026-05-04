@@ -46,7 +46,7 @@ void TcpConnection::ConnectionDestructor(){
     //std::cout << CurrentThread::tid() << " TcpConnection::ConnectionDestructor" << std::endl;
     // 将该操作从析构处，移植该处，增加性能，因为在析构前，当前`TcpConnection`已经相当于关闭了。
     // 已经可以将其从loop处离开。
-    delete session_;
+    session_.reset();
     loop_->DeleteChannel(channel_.get());
 }
 
@@ -59,7 +59,7 @@ void TcpConnection::set_close_callback(std::function<void(const std::shared_ptr<
 void TcpConnection::set_message_callback(std::function<void(const std::shared_ptr<TcpConnection> &)> const &fn) { 
     on_message_ = std::move(fn);
 }
-void TcpConnection::set_session(SessionBase* session) {
+void TcpConnection::set_session(std::shared_ptr<SessionBase> session) {
     session_ = session;
 }
 
@@ -194,7 +194,7 @@ void TcpConnection::WriteNonBlocking(){
 
 HttpContext *TcpConnection::context() const { return context_.get(); }
 
-SessionBase *TcpConnection::session() const { return session_; }
+std::shared_ptr<SessionBase> TcpConnection::session() const { return session_; }
 
 TimeStamp TcpConnection::timestamp() const { return timestamp_; }
 
